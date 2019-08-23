@@ -58,7 +58,11 @@ export class AddCalendarBar extends Component {
   afterAddCalendar(result) {
     if (result.status === 200) {
       this.skipToIndex();
-    } else {
+    } 
+    else if(result.status === 403){
+      alert(messages.SameCalendarName);
+    }
+    else {
       // eslint-disable-next-line no-alert
       alert(messages.CalendarAddFailed);
     }

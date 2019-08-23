@@ -60,6 +60,7 @@ const messages = {
   CalendarLoadFailed: '日历加载失败!',
   CalendarAddFailed: '日历添加失败!',
   CalendarEditFailed: '日历编辑失败!',
+  SameCalendarName: '该日历已存在!',
   CalendarDeleteFailed: '日历删除失败!',
   CommentLoadFailed: '评论加载失败!',
   CommentReplyFailed: '评论回复失败!',

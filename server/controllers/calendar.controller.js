@@ -68,25 +68,43 @@ export function addCalendar(req, res) {
     });
     return;
   }
-  const newCalendar = new Calendar();
-  newCalendar.calendarId = cuid();
-  newCalendar.name = sanitizeHtml(req.body.name);
-  newCalendar.creatorId = req.session.userId;
-  newCalendar.teamId = req.session.teamId;
-  newCalendar.color = sanitizeHtml(req.body.color);
-  newCalendar.save((err, saved) => {
+
+  Calendar.findOne({ teamId:req.session.teamId,name:req.body.name }, (err, foundCalendar) => {
     if (err) {
       res.status(500).send({
         status: 500,
         msg: glossary.internalError[language],
       });
     } else {
-      res.json({
-        status: 200,
-        msg: glossary.success[language],
-        calendarId: saved.calendarId,
-      });
-      res.send();
+      // If found nothing
+      if (foundCalendar) {
+        res.status(403).send({
+          status: 403,
+          msg: glossary.notFound[language],
+        });
+      } else {
+        const newCalendar = new Calendar();
+        newCalendar.calendarId = cuid();
+        newCalendar.name = sanitizeHtml(req.body.name);
+        newCalendar.creatorId = req.session.userId;
+        newCalendar.teamId = req.session.teamId;
+        newCalendar.color = sanitizeHtml(req.body.color);
+        newCalendar.save((err, saved) => {
+          if (err) {
+            res.status(500).send({
+              status: 500,
+              msg: glossary.internalError[language],
+            });
+          } else {
+            res.json({
+              status: 200,
+              msg: glossary.success[language],
+              calendarId: saved.calendarId,
+            });
+            res.send();
+          }
+        });
+      }
     }
   });
 }

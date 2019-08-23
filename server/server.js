@@ -192,8 +192,16 @@ app.use((req, res, next) => {
   });
 });
 
+var https = require('https');
+var fs = require('fs');
+var credential = {
+    key:  fs.readFileSync('server/keys/1609746_animita.cn.key'),
+    cert: fs.readFileSync('server/keys/1609746_animita.cn.crt')
+}
+var httpsServer = https.createServer(credential, app);
+
 // start app
-app.listen(serverConfig.port, (error) => {
+httpsServer.listen(serverConfig.port, (error) => {
   /* istanbul ignore next */
   if (!error) {
     console.log(`MERN is running on port: ${serverConfig.port}! Build something amazing!`); // eslint-disable-line
